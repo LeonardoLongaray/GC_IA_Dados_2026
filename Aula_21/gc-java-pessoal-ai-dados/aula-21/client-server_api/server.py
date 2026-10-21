@@ -8,9 +8,11 @@ next_id = 1
 def home():
     return 'hello world!'
 
+
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
     return jsonify(tasks)
+
 
 @app.route('/tasks/<int:task_id>', methods=['GET'])
 def get_task_by_id(task_id: int):
@@ -18,6 +20,7 @@ def get_task_by_id(task_id: int):
     if task is None:
         abort(404, description = 'task not found')
     return jsonify(task)
+
 
 @app.route('/tasks/new', methods= ['POST'])
 def create_task():
@@ -33,6 +36,7 @@ def create_task():
     next_id += 1
     return jsonify(new_task), 201
 
+
 @app.route('/tasks/delete/<int:task_id>', methods = ['DELETE'])
 def delete_task(task_id: int):
     global tasks
@@ -42,7 +46,8 @@ def delete_task(task_id: int):
     tasks = next(t for t in tasks if t['id'] != task_id)
     return 201
 
-@app.route ('/tasks/update/<int:task_id>')
+
+@app.route ('/tasks/update/<int:task_id>', methods = ['PUT'])
 def to_update_task(task_id: int):
     task = next((t for t in tasks if t['id'] == task_id), None)
     if task is None:
