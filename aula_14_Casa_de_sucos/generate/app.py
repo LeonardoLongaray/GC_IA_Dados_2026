@@ -7,6 +7,7 @@ BASE_URL = "https://www.fruityvice.com/api/fruit"
 sucos = []
 proximo_id = 1
 
+@app.route('/frutas/<frutas_nomes>', methods=['GET'])
 def detalhes_frutas(frutas_nomes): 
     frutas_detalhes = []
     for fruta in frutas_nomes:
@@ -32,12 +33,13 @@ def criar_suco():
 
     frutas_detalhes = detalhes_frutas(frutas_nomes)
     if frutas_detalhes is None:
-        return jsonify({"Vish": "Essa ainda não tem nada."})
+        return jsonify({"Vish": "Esse não tem."})
     
     suco = {
         "id": proximo_id,
         "nome": nome_suco,
         "frutas": frutas_detalhes,
+        "tem gosto de": "suco bom",
         "total_calorias": sum(fruta['nutritions']['calories'] for fruta in frutas_detalhes),
         "total_acucar": sum(fruta['nutritions']['sugar'] for fruta in frutas_detalhes)
         }
