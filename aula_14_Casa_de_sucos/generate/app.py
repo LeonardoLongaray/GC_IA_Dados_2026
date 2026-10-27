@@ -4,30 +4,28 @@ from urllib.parse import quote
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-app = FastAPI(title="API Casa de Sucos")
+app = FastAPI(title="Sucopira")
 
 BASE_URL = "https://www.fruityvice.com/api/fruit"
 
-# Armazenamento temporário dos sucos
+# Armazenamento de comanda
 sucos = []
 proximo_id = 1
 
 
 # Modelo dos dados recebidos ao criar um suco
-class SucoEntrada(BaseModel):
+class suco_entrada(BaseModel):
     nome: str = Field(min_length=1)
     frutas: list[str] = Field(min_length=1)
     tem_gosto_de: str = Field(min_length=1)
 
 
 # Modelo dos dados recebidos ao atualizar as frutas
-class AtualizarFrutas(BaseModel):
+class atualizar_frutas(BaseModel):
     frutas: list[str] = Field(min_length=1)
 
 
 def consultar_fruta(nome: str):
-    """Consulta uma fruta na API Fruityvice."""
-
     nome_url = quote(nome.strip().lower(), safe="")
 
     try:
@@ -55,8 +53,6 @@ def consultar_fruta(nome: str):
 
 
 def calcular_totais(frutas: list[str]):
-    """Consulta as frutas e soma calorias e açúcar."""
-
     total_calorias = 0
     total_acucar = 0
 
@@ -102,7 +98,7 @@ def obter_fruta(nome: str):
 
 # POST /sucos
 @app.post("/sucos", status_code=201)
-def criar_suco(dados: SucoEntrada):
+def criar_suco(dados: suco_entrada):
     global proximo_id
 
     nome = dados.nome.strip()
