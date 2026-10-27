@@ -4,7 +4,6 @@ import requests
 app = Flask(__name__)
 BASE_URL = "https://www.fruityvice.com/api/fruit"
 
-# Armazenamento dos sucos
 sucos = []
 proximo_id = 1
 
