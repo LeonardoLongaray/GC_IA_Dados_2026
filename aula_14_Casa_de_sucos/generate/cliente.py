@@ -1,6 +1,6 @@
 import requests
 
-url = "http://127.0.0.1:5000/frutas/sucos"
+url = "http://127.0.0.1:5000/sucos"
 
 print("--- Montador de Sucos ---")
 nome_suco = input("Qual vai ser o nome do suco? ")
