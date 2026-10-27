@@ -2,17 +2,17 @@ import requests
 
 url = "http://127.0.0.1:5000/sucos"
 
-print("--- Montador de Sucos ---")
-nome_suco = input("Qual vai ser o nome do suco? ")
+print("--- VAMOS FAZER OS MELHORES SUCOS DO MUNDO ---")
+nome_suco = input("Qual o nome do MELHOR SUCO DO MUNDO? ")
 
 frutas = []
-print("Digite os nomes das frutas (digite 'sair' para terminar):")
+print("Quais os nomes das MELHORES FRUTAS PARA O MELHOR SUCO DO MUNDO? (digite 'sair' quando terminar de escolher):")
 
 while True:
     fruta = input("Nome da fruta: ").strip().lower()
     if fruta == 'sair':
         break
-    if fruta:
+    elif fruta:
         frutas.append(fruta)
 
 dados_envio = {
