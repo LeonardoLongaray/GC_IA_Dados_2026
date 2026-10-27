@@ -1,10 +1,5 @@
 
 import requests
-from urllib.parse import quote
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-
-app = FastAPI(title="Sucopira")
 
 BASE_URL = "https://www.fruityvice.com/api/fruit"
 
