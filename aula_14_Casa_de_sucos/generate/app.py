@@ -7,7 +7,6 @@ BASE_URL = "https://www.fruityvice.com/api/fruit"
 sucos = []
 proximo_id = 1
 
-@app.route('/frutas/<frutas_nomes>', methods=['GET'])
 def detalhes_frutas(frutas_nomes): 
     frutas_detalhes = []
     for fruta in frutas_nomes:
