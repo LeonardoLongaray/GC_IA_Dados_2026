@@ -37,7 +37,7 @@ def criar_suco():
     suco = {
         "id": proximo_id,
         "nome": nome_suco,
-        "frutas": frutas_detalhes,
+        "frutas": [fruta['name'] for fruta in frutas_detalhes],
         "tem gosto de": "suco bom",
         "total_calorias": sum(fruta['nutritions']['calories'] for fruta in frutas_detalhes),
         "total_acucar": sum(fruta['nutritions']['sugar'] for fruta in frutas_detalhes)
@@ -49,14 +49,24 @@ def criar_suco():
 @app.route('/sucos/<int:id>', methods=['PUT'])
 def atualizar_suco(id):
     dados = request.get_json()
-    suco_encontrato = None
+    suco_encontrado = None
     for suco in sucos:
         if suco['id'] == id:
-            suco_encontrato = suco
+            suco_encontrado = suco
             break
-    if suco_encontrato is None:
-        return jsonify({"erro": "Suco não existe"}), 404
+    if suco_encontrado is None:
+        return jsonify({"erro": "Suco não criado ainda"}), 404
+    
+    frutas_detalhes = detalhes_frutas(dados.get('frutas'))
 
+    if frutas_detalhes is None:
+        return jsonify({"Vish": "Essa fruta aí não tem."}), 404
+    suco_encontrado['frutas'] = [
+    fruta['name'] for fruta in frutas_detalhes
+]
+
+    suco_encontrado['total_calorias'] = sum(fruta['nutritions']['calories'] for fruta in frutas_detalhes)
+    return jsonify(suco_encontrado), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
