@@ -46,5 +46,17 @@ def criar_suco():
     proximo_id += 1
     return jsonify(suco)
 
+@app.route('/sucos/<int:id>', methods=['PUT'])
+def atualizar_suco(id):
+    dados = request.get_json()
+    suco_encontrato = None
+    for suco in sucos:
+        if suco['id'] == id:
+            suco_encontrato = suco
+            break
+    if suco_encontrato is None:
+        return jsonify({"erro": "Suco não existe"}), 404
+
+
 if __name__ == '__main__':
     app.run(debug=True)
