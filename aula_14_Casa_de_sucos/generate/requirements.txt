@@ -1,0 +1,2 @@
+
+Bibliotecas: flask e requests
