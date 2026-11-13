@@ -1,0 +1,59 @@
+#BADGES
+
+1 - Passou no GC
+2 - Shark Tank
+3 - Quiz brega
+4 - Quiz rock 
+5 - Quiz otaku
+6 - API casa de sucos
+7 - Richard ordem 
+8 - Educathon
+9 - Python analise
+10 - Pensamento computacional
+11 - Desafio SQL
+12 - 
+
+Grupo 9 
+Paulo Gustavo
+Joao Schervensquy
+Leonardo Longaray
+Lana Salvatori
+
+Análise de dados & IA
+tema: Escolha aberta do grupo
+Big Idea - Saúde
+{
+Ainda dá pra aprender algo com isso?
+
+Por que isso é importante? 
+
+Ainda é relevante hoje em dia? 
+
+É educativo?
+
+Qual o principal foco?
+
+}
+
+Essential questions: 
+
+Challenge:
+
+
+Guiding Questions: Até entender como trabalhar a solução precisamos de ideias para lidar com o assunto:
+Onde achamos informações;
+Quais informações buscar;
+Existem estudos a respeito?;
+Conhecimentos práticos de profissionais da área;
+
+
+---------------->|--------->|---------------->
+Guiding question | Resource | Síntese/Resposta
+
+
+PRE-REQUISITOS
+IA para resolver | Limpeza e tratamento de dados | Maipulação de dados (EDA) | Automação
+Uma implementação de IA | Dados reais tratados | Análise exploratória | Algum processo do projeto precisa rodar sozinho
+
+KODAMA, UCI, KEGGLE <----- Busca de dados
+
