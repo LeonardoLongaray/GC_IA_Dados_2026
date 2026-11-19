@@ -1,0 +1,4 @@
+Desenvolvimento agente IA 
+Leitura de chat
+Transcrição de áudio
+Geração de relatórios
