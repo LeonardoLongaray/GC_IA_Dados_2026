@@ -1,0 +1,40 @@
+{
+  "identificacao": {
+    "paciente_id": "PAC-001",
+    "data_referencia": "2026-11-19",
+    "periodo": "diurno"
+  },
+  "registros": [
+    {
+      "categoria": "alimentacao",
+      "observacao": "Paciente aceitou parcialmente o almoço.",
+      "data_hora": "2026-11-19T12:30:00",
+      "origem": "cuidador",
+      "tipo_fonte": "mensagem_escrita"
+    },
+    {
+      "categoria": "estado_geral",
+      "observacao": "Cuidador relatou sonolência maior que no dia anterior.",
+      "data_hora": "2026-11-19T14:00:00",
+      "origem": "cuidador",
+      "tipo_fonte": "audio_transcrito"
+    }
+  ],
+  "resumo_diario": {
+    "alimentacao": "Aceitação parcial do almoço.",
+    "estado_geral": "Maior sonolência relatada.",
+    "intercorrencias": []
+  },
+  "informacoes_ausentes": [],
+  "pontos_para_revisao": [
+    "Verificar a alteração de sonolência relatada."
+  ],
+  "revisao_humana": {
+    "necessaria": true,
+    "status": "pendente"
+  },
+  "metadados": {
+    "modelo_utilizado": "ollama",
+    "versao_schema": "1.0"
+  }
+}
