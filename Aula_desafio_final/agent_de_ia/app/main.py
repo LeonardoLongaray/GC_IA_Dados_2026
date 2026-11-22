@@ -1,24 +1,35 @@
-import streamlit as st
+from fastapi import FastAPI
+from agent_de_ia.app.api_endpoints import messages, audio
 
-st.set_page_config(
-    page_title="Agente de Áudio",
-    page_icon="🎙️",
-    layout="centered"
+app = FastAPI(
+    title="Agente de Acompanhamento",
+    description="API para organização de registros e relatórios diários.",
+    version="1.0.0"
 )
 
-st.title("🎙️ Agente de Áudio")
-st.write(
-    "Envie uma gravação para gerar "
-    "uma transcrição e um relatório."
+app.include_router(
+    messages.router,
+    prefix="/api/v1",
+    tags=["Messages"]
 )
 
-audio = st.file_uploader(
-    "Selecione seu arquivo de áudio",
-    type=["mp3", "wav", "m4a", "ogg"]
+app.include_router(
+    audio.router,
+    prefix="/api/v1",
+    tags=["Audio"]
 )
 
-if audio:
-    st.success(f"Arquivo recebido: {audio.name}")
-    st.write(f"Tamanho: {audio.size / 1024:.2f} KB")
 
-    st.info("A transcrição será implementada em uma próxima etapa.")
+@app.get("/")
+def home():
+    return {
+        "message": "Agente de acompanhamento ativo!",
+        "status": "online"
+    }
+
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "healthy"
+    }
