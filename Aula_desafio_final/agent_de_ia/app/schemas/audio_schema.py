@@ -13,3 +13,4 @@ class AudioResponse(BaseModel):
     received_at: datetime
     source: str
     status: str
+    transcription_text: str
