@@ -7,7 +7,7 @@ from groq import Groq
 
 
 # Localiza o .env na raiz do projeto
-BASE_DIR = Path(__file__).resolve().parents[3]
+BASE_DIR = Path(__file__).resolve().parents[2]
 load_dotenv(BASE_DIR / ".env")
 
 

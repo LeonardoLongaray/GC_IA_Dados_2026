@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from agent_de_ia.app.api_endpoints import messages, audio
+from agent_de_ia.app.api_endpoints import messages, audio, interpretations
 
 app = FastAPI(
     title="Agente de Acompanhamento",
@@ -19,6 +20,11 @@ app.include_router(
     tags=["Audio"]
 )
 
+app.include_router(
+    interpretations.router,
+    prefix="/api/v1",
+    tags=["Interpretations"]
+)
 
 @app.get("/")
 def home():
