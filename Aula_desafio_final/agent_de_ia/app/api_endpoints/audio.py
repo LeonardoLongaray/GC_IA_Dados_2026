@@ -2,23 +2,20 @@
 from datetime import datetime, timezone
 from pathlib import Path
 
-from fastapi import (
-    APIRouter,
-    UploadFile,
-    File,
-    Form,
-    HTTPException
-)
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from starlette.concurrency import run_in_threadpool
 
-from agent_de_ia.app.schemas.audio_schema import AudioResponse
-from agent_de_ia.app.services.transcription_service import (
-    transcribe_audio
-)
+from agent_de_ia.app.schemas.normalized_input_schema import NormalizedInput
+
+from agent_de_ia.app.services.transcription_service import transcribe_audio
+
+from agent_de_ia.app.services.normalization_service import normalize_audio
 
 
 router = APIRouter()
 
+
+# Extensões de áudio aceitas pelo sistema.
 ALLOWED_EXTENSIONS = {
     ".wav",
     ".mp3",
@@ -29,79 +26,124 @@ ALLOWED_EXTENSIONS = {
     ".flac"
 }
 
-MAX_AUDIO_SIZE = 20 * 1024 * 1024
+
+# Tamanho máximo permitido: 20 MB.
+MAX_FILE_SIZE = 20 * 1024 * 1024
 
 
 @router.post(
     "/audio",
-    response_model=AudioResponse,
-    status_code=202
+    response_model=NormalizedInput,
+    status_code=200
 )
 async def receive_audio(
     patient_id: str = Form(...),
     caregiver_id: str = Form(...),
     file: UploadFile = File(...)
 ):
-    filename = file.filename or "audio"
 
-    extension = Path(filename).suffix.lower()
-
-    if extension not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=415,
-            detail="Formato de áudio não suportado."
-        )
-
-    audio_content = await file.read(MAX_AUDIO_SIZE + 1)
-
-    if not audio_content:
-        raise HTTPException(
-            status_code=400,
-            detail="O arquivo de áudio está vazio."
-        )
-
-    if len(audio_content) > MAX_AUDIO_SIZE:
-        raise HTTPException(
-            status_code=413,
-            detail="O áudio ultrapassa o limite de 20 MB."
-        )
+    received_at = datetime.now(timezone.utc)
 
     try:
+
+        # 1. Verifica se o arquivo possui nome e extensão válidos.
+
+        filename = file.filename or "audio.webm"
+
+        extension = Path(filename).suffix.lower()
+
+        if extension not in ALLOWED_EXTENSIONS:
+
+            raise HTTPException(
+                status_code=400,
+                detail="Formato de áudio não permitido."
+            )
+
+
+        # 2. Lê o arquivo recebido.
+
+        audio_bytes = await file.read()
+
+        content_type = file.content_type
+
+        if not audio_bytes:
+
+            raise HTTPException(
+                status_code=400,
+                detail="O arquivo de áudio está vazio."
+            )
+
+
+        # 3. Verifica o tamanho do arquivo.
+
+        size_bytes = len(audio_bytes)
+
+        if size_bytes > MAX_FILE_SIZE:
+
+            raise HTTPException(
+                status_code=413,
+                detail="O áudio ultrapassou o limite de 20 MB."
+            )
+
+
+        # 4. Envia o áudio para o serviço de transcrição.
+
         transcription_text = await run_in_threadpool(
             transcribe_audio,
-            audio_content,
+            audio_bytes,
             filename
         )
 
-    except RuntimeError:
+
+        # 5. Verifica se a transcrição retornou algum conteúdo.
+
+        if not transcription_text or not transcription_text.strip():
+
+            raise HTTPException(
+                status_code=422,
+                detail="Não foi possível identificar uma fala no áudio."
+            )
+
+
+        # 6. Normaliza a transcrição.
+
+        normalized_data = normalize_audio(
+            patient_id=patient_id,
+            caregiver_id=caregiver_id,
+            transcription_text=transcription_text,
+            filename=filename,
+            content_type=content_type,
+            size_bytes=size_bytes,
+            received_at=received_at
+        )
+
+
+        # 7. Retorna os dados normalizados para a interface.
+
+        return normalized_data
+
+
+    except HTTPException:
+
+        raise
+
+
+    except RuntimeError as error:
+
         raise HTTPException(
             status_code=500,
-            detail="Configuração da transcrição indisponível."
+            detail=str(error)
         )
+
 
     except Exception:
+
         raise HTTPException(
             status_code=502,
-            detail="Não foi possível realizar a transcrição."
+            detail="Não foi possível realizar a transcrição do áudio."
         )
+
 
     finally:
+
         await file.close()
-
-    if not transcription_text.strip():
-        raise HTTPException(
-            status_code=422,
-            detail="Não foi possível identificar fala no áudio."
-        )
-
-    return AudioResponse(
-        patient_id=patient_id,
-        caregiver_id=caregiver_id,
-        filename=filename,
-        content_type=file.content_type,
-        size_bytes=len(audio_content),
-        received_at=datetime.now(timezone.utc),
-        source="audio",
-        status="transcribed",
-        transcription_text=transcription_text
-    )

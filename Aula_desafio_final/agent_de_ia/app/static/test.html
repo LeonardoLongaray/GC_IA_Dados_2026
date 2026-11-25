@@ -1,0 +1,1541 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agente de Acompanhamento</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            color: #253247;
+            margin: 0;
+            padding: 30px 16px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #17365d;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px #0000000a;
+        }
+
+        .section-title {
+            margin-top: 0;
+            color: #17365d;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin: 17px 0 7px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 13px 20px;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .secondary-button {
+            background: #475569;
+        }
+
+        .secondary-button:hover {
+            background: #334155;
+        }
+
+        .danger-button {
+            background: #dc2626;
+        }
+
+        .danger-button:hover {
+            background: #b91c1c;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            background: #e2e8f0;
+            color: #334155;
+            margin: 0;
+        }
+
+        .tab-button.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .input-panel.hidden,
+        .hidden {
+            display: none;
+        }
+
+        .recording-area {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 22px;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+        .recording-indicator {
+            font-size: 15px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #64748b;
+        }
+
+        .recording-indicator.active {
+            color: #dc2626;
+        }
+
+        .recording-dot {
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            background: #dc2626;
+            border-radius: 50%;
+            margin-right: 7px;
+        }
+
+        .timer {
+            font-size: 34px;
+            font-weight: bold;
+            color: #17365d;
+            margin: 15px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .recording-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 18px;
+        }
+
+        .helper-text {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-top: 15px;
+        }
+
+        #status {
+            margin-top: 18px;
+            font-weight: bold;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        .success {
+            color: #15803d;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .report-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .report-title {
+            font-size: 25px;
+            font-weight: bold;
+            color: #17365d;
+            margin-bottom: 15px;
+        }
+
+        .report-meta {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 2;
+        }
+
+        .report-notice {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .report-section {
+            margin-top: 28px;
+        }
+
+        .report-section h3 {
+            color: #334155;
+            margin-bottom: 15px;
+        }
+
+        .summary {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        .observation {
+            border: 1px solid #e2e8f0;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 13px;
+            background: #fff;
+        }
+
+        .observation h3 {
+            color: #2563eb;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .observation p {
+            line-height: 1.6;
+        }
+
+        .muted {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .evidence {
+            background: #f1f5f9;
+            padding: 13px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .missing-info {
+            background: #fff7ed;
+            border-left: 4px solid #f59e0b;
+            padding: 16px;
+            border-radius: 5px;
+        }
+
+        .missing-info li {
+            margin-bottom: 8px;
+        }
+
+        .review-label {
+            color: #b45309;
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        .footer-note {
+            border-top: 1px solid #e2e8f0;
+            margin-top: 25px;
+            padding-top: 15px;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .recording-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Agente de Acompanhamento</h1>
+
+    <p class="subtitle">
+        Ambiente de testes para interpretação de relatos escritos e em áudio.
+    </p>
+
+    <!-- IDENTIFICAÇÃO -->
+
+    <div class="card">
+
+        <h2 class="section-title">Identificação</h2>
+
+        <label for="patientId">Identificação do paciente</label>
+
+        <input
+            type="text"
+            id="patientId"
+            value="PAC-001"
+            required
+        >
+
+        <label for="caregiverId">Identificação do cuidador</label>
+
+        <input
+            type="text"
+            id="caregiverId"
+            value="CUID-001"
+            required
+        >
+
+    </div>
+
+
+    <!-- ESCOLHA DO TIPO DE ENTRADA -->
+
+    <div class="card">
+
+        <h2 class="section-title">Novo relato</h2>
+
+        <div class="tabs">
+
+            <button
+                type="button"
+                id="textTab"
+                class="tab-button active"
+                onclick="showInputPanel('text')"
+            >
+                Escrever relato
+            </button>
+
+            <button
+                type="button"
+                id="audioTab"
+                class="tab-button"
+                onclick="showInputPanel('audio')"
+            >
+                Gravar áudio
+            </button>
+
+        </div>
+
+
+        <!-- ENTRADA ESCRITA -->
+
+        <div id="textPanel" class="input-panel">
+
+            <form id="messageForm">
+
+                <label for="message">Relato do cuidador</label>
+
+                <textarea
+                    id="message"
+                    placeholder="Escreva aqui as informações relatadas pelo cuidador..."
+                    required
+                ></textarea>
+
+                <button type="submit" id="textSubmitButton">
+                    Interpretar relato
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ENTRADA POR ÁUDIO -->
+
+        <div id="audioPanel" class="input-panel hidden">
+
+            <div class="recording-area">
+
+                <h3>Gravação de áudio</h3>
+
+                <div class="timer" id="timer">
+                    00:00
+                </div>
+
+                <div class="recording-indicator" id="recordingStatus">
+                    Aguardando gravação
+                </div>
+
+                <div class="recording-actions">
+
+                    <button
+                        type="button"
+                        id="startRecording"
+                        onclick="startRecording()"
+                    >
+                        Iniciar gravação
+                    </button>
+
+                    <button
+                        type="button"
+                        id="stopRecording"
+                        class="danger-button"
+                        onclick="stopRecording()"
+                        disabled
+                    >
+                        Parar gravação
+                    </button>
+
+                </div>
+
+                <div id="audioPreviewContainer" class="hidden">
+
+                    <p><strong>Prévia do áudio</strong></p>
+
+                    <audio
+                        id="audioPreview"
+                        controls
+                    ></audio>
+
+                    <button
+                        type="button"
+                        id="sendAudioButton"
+                        onclick="sendAudio()"
+                    >
+                        Enviar e interpretar áudio
+                    </button>
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        onclick="resetRecording()"
+                    >
+                        Gravar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+            <p class="helper-text">
+                Clique em iniciar gravação e permita o acesso ao microfone
+                quando o navegador solicitar. Depois, pare a gravação,
+                escute o resultado e envie para interpretação.
+            </p>
+
+        </div>
+
+        <p id="status"></p>
+
+    </div>
+
+
+    <!-- RESULTADO -->
+
+    <div class="card hidden" id="resultCard">
+
+        <div id="resultContent"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ELEMENTOS DA INTERFACE
+
+    const form = document.getElementById("messageForm");
+
+    const statusElement = document.getElementById("status");
+
+    const resultCard = document.getElementById("resultCard");
+
+    const resultContent = document.getElementById("resultContent");
+
+
+    // CONTROLE DA GRAVAÇÃO
+
+    let mediaRecorder = null;
+
+    let audioChunks = [];
+
+    let audioBlob = null;
+
+    let audioUrl = null;
+
+    let recordingStream = null;
+
+    let recordingInterval = null;
+
+    let recordingSeconds = 0;
+
+
+    // TRADUÇÃO DAS CATEGORIAS
+
+    const categories = {
+
+        general: "Estado geral",
+        feeding: "Alimentação",
+        hydration: "Hidratação",
+        mobility: "Mobilidade",
+        positioning: "Posicionamento",
+        sleep: "Sono e descanso",
+        elimination: "Eliminações",
+        skin_hygiene: "Pele e higiene",
+        medication: "Medicação",
+        vital_signs: "Sinais vitais",
+        incident: "Intercorrências",
+        other: "Outros registros"
+
+    };
+
+
+    // TRADUÇÃO DOS STATUS
+
+    const statuses = {
+
+        reported: "Relatado",
+        unconfirmed: "Não confirmado",
+        not_measured: "Não medido",
+        not_recorded: "Sem registro"
+
+    };
+
+
+    // PROTEÇÃO CONTRA INSERÇÃO DE HTML
+
+    function escapeHtml(value) {
+
+        return String(value ?? "").replace(/[&<>"']/g, character => ({
+
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+
+        })[character]);
+
+    }
+
+
+    // TROCA ENTRE TEXTO E ÁUDIO
+
+    function showInputPanel(type) {
+
+        const textPanel = document.getElementById("textPanel");
+
+        const audioPanel = document.getElementById("audioPanel");
+
+        const textTab = document.getElementById("textTab");
+
+        const audioTab = document.getElementById("audioTab");
+
+        if (type === "text") {
+
+            textPanel.classList.remove("hidden");
+
+            audioPanel.classList.add("hidden");
+
+            textTab.classList.add("active");
+
+            audioTab.classList.remove("active");
+
+        } else {
+
+            textPanel.classList.add("hidden");
+
+            audioPanel.classList.remove("hidden");
+
+            textTab.classList.remove("active");
+
+            audioTab.classList.add("active");
+
+        }
+
+        statusElement.textContent = "";
+
+        statusElement.className = "";
+
+        resultCard.classList.add("hidden");
+
+    }
+
+
+    // FORMATA O TEMPO DA GRAVAÇÃO
+
+    function updateTimer() {
+
+        const minutes = Math.floor(recordingSeconds / 60);
+
+        const seconds = recordingSeconds % 60;
+
+        document.getElementById("timer").textContent =
+
+            String(minutes).padStart(2, "0") +
+
+            ":" +
+
+            String(seconds).padStart(2, "0");
+
+    }
+
+
+    // INICIA A GRAVAÇÃO
+
+    async function startRecording() {
+
+        try {
+
+            if (!navigator.mediaDevices ||
+                !navigator.mediaDevices.getUserMedia) {
+
+                throw new Error(
+                    "Seu navegador não disponibiliza acesso ao microfone."
+                );
+
+            }
+
+            if (!window.MediaRecorder) {
+
+                throw new Error(
+                    "Seu navegador não suporta gravação de áudio."
+                );
+
+            }
+
+            // Solicita permissão para acessar o microfone.
+
+            recordingStream = await navigator.mediaDevices.getUserMedia({
+
+                audio: true
+
+            });
+
+
+            // Seleciona um formato compatível com o navegador.
+
+            const supportedTypes = [
+
+                "audio/webm;codecs=opus",
+
+                "audio/webm",
+
+                "audio/ogg;codecs=opus",
+
+                "audio/ogg",
+
+                "audio/mp4"
+
+            ];
+
+            const selectedType = supportedTypes.find(type =>
+
+                MediaRecorder.isTypeSupported(type)
+
+            );
+
+
+            // Cria o gravador.
+
+            if (selectedType) {
+
+                mediaRecorder = new MediaRecorder(recordingStream, {
+
+                    mimeType: selectedType
+
+                });
+
+            } else {
+
+                mediaRecorder = new MediaRecorder(recordingStream);
+
+            }
+
+
+            audioChunks = [];
+
+            audioBlob = null;
+
+            mediaRecorder.ondataavailable = function(event) {
+
+                if (event.data && event.data.size > 0) {
+
+                    audioChunks.push(event.data);
+
+                }
+
+            };
+
+
+            mediaRecorder.onstop = function() {
+
+                const mimeType = mediaRecorder.mimeType || "audio/webm";
+
+                audioBlob = new Blob(audioChunks, {
+
+                    type: mimeType
+
+                });
+
+                // Libera o microfone após a gravação.
+
+                if (recordingStream) {
+
+                    recordingStream.getTracks().forEach(track => track.stop());
+
+                    recordingStream = null;
+
+                }
+
+                // Cria endereço temporário para reprodução.
+
+                if (audioUrl) {
+
+                    URL.revokeObjectURL(audioUrl);
+
+                }
+
+                audioUrl = URL.createObjectURL(audioBlob);
+
+                document.getElementById("audioPreview").src = audioUrl;
+
+                document.getElementById("audioPreviewContainer")
+                    .classList.remove("hidden");
+
+                document.getElementById("recordingStatus").textContent =
+                    "Gravação concluída. Você pode ouvir antes de enviar.";
+
+                document.getElementById("recordingStatus")
+                    .classList.remove("active");
+
+                document.getElementById("startRecording").disabled = false;
+
+                document.getElementById("stopRecording").disabled = true;
+
+            };
+
+
+            mediaRecorder.start();
+
+            recordingSeconds = 0;
+
+            updateTimer();
+
+            document.getElementById("audioPreviewContainer")
+                .classList.add("hidden");
+
+            document.getElementById("recordingStatus").innerHTML =
+                '<span class="recording-dot"></span>Gravando áudio...';
+
+            document.getElementById("recordingStatus")
+                .classList.add("active");
+
+            document.getElementById("startRecording").disabled = true;
+
+            document.getElementById("stopRecording").disabled = false;
+
+            statusElement.textContent = "";
+
+            statusElement.className = "";
+
+            resultCard.classList.add("hidden");
+
+
+            // Atualiza o cronômetro a cada segundo.
+
+            recordingInterval = setInterval(() => {
+
+                recordingSeconds++;
+
+                updateTimer();
+
+            }, 1000);
+
+
+        } catch (error) {
+
+            console.error("Erro ao iniciar gravação:", error);
+
+            statusElement.textContent =
+                "Não foi possível iniciar a gravação: " + error.message;
+
+            statusElement.className = "error";
+
+            if (recordingStream) {
+
+                recordingStream.getTracks().forEach(track => track.stop());
+
+                recordingStream = null;
+
+            }
+
+        }
+
+    }
+
+
+    // PARA A GRAVAÇÃO
+
+    function stopRecording() {
+
+        if (!mediaRecorder ||
+            mediaRecorder.state !== "recording") {
+
+            return;
+
+        }
+
+        mediaRecorder.stop();
+
+        clearInterval(recordingInterval);
+
+        recordingInterval = null;
+
+    }
+
+
+    // DESCARTA A GRAVAÇÃO ATUAL
+
+    function resetRecording() {
+
+        audioBlob = null;
+
+        audioChunks = [];
+
+        if (audioUrl) {
+
+            URL.revokeObjectURL(audioUrl);
+
+            audioUrl = null;
+
+        }
+
+        document.getElementById("audioPreview").removeAttribute("src");
+
+        document.getElementById("audioPreviewContainer")
+            .classList.add("hidden");
+
+        document.getElementById("timer").textContent = "00:00";
+
+        document.getElementById("recordingStatus").textContent =
+            "Aguardando gravação";
+
+        document.getElementById("recordingStatus")
+            .classList.remove("active");
+
+        document.getElementById("startRecording").disabled = false;
+
+        document.getElementById("stopRecording").disabled = true;
+
+        statusElement.textContent = "";
+
+        statusElement.className = "";
+
+    }
+
+
+    // TRATAMENTO DE ERROS DA API
+
+    async function getApiError(response) {
+
+        const body = await response.json().catch(() => null);
+
+        if (!body) {
+
+            return `Erro HTTP ${response.status}: resposta inválida do servidor.`;
+
+        }
+
+        const detail = body.detail ?? body.message ?? body;
+
+        if (Array.isArray(detail)) {
+
+            return detail.map(item => {
+
+                const location = Array.isArray(item.loc)
+
+                    ? item.loc.join(" → ")
+
+                    : "Campo";
+
+                return `${location}: ${item.msg || JSON.stringify(item)}`;
+
+            }).join("\n");
+
+        }
+
+        if (typeof detail === "string") {
+
+            return detail;
+
+        }
+
+        return JSON.stringify(detail, null, 2);
+
+    }
+
+
+    // PREPARA OS DADOS PARA INTERPRETAÇÃO
+
+    function prepareInterpretationPayload(normalizedData, fallbackText = null) {
+
+        const content = normalizedData.content ?? fallbackText;
+
+        if (typeof content !== "string" || !content.trim()) {
+
+            throw new Error(
+                "A API não retornou um texto válido para interpretação."
+            );
+
+        }
+
+        return {
+
+            patient_id: normalizedData.patient_id,
+
+            caregiver_id: normalizedData.caregiver_id,
+
+            source: normalizedData.source,
+
+            content: content,
+
+            received_at: normalizedData.received_at ||
+                new Date().toISOString(),
+
+            original_filename: normalizedData.original_filename ?? null,
+
+            content_type: normalizedData.content_type ?? null,
+
+            size_bytes: normalizedData.size_bytes ?? null
+
+        };
+
+    }
+
+
+    // ENVIA DADOS NORMALIZADOS PARA A IA
+
+    async function interpretNormalizedData(normalizedData, fallbackText = null) {
+
+        const payload = prepareInterpretationPayload(
+            normalizedData,
+            fallbackText
+        );
+
+        console.log("Dados enviados para interpretação:", payload);
+
+        statusElement.textContent =
+            "Entrada recebida. A IA está interpretando as informações...";
+
+        const response = await fetch("/api/v1/interpretations", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json"
+
+            },
+
+            body: JSON.stringify(payload)
+
+        });
+
+        if (!response.ok) {
+
+            throw new Error(await getApiError(response));
+
+        }
+
+        const result = await response.json();
+
+        console.log("Resultado da interpretação:", result);
+
+        displayResult(result);
+
+        statusElement.textContent =
+            "Interpretação concluída com sucesso!";
+
+        statusElement.className = "success";
+
+    }
+
+
+    // ENVIA MENSAGEM ESCRITA
+
+    form.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const patientId = document.getElementById("patientId")
+            .value.trim();
+
+        const caregiverId = document.getElementById("caregiverId")
+            .value.trim();
+
+        const message = document.getElementById("message")
+            .value.trim();
+
+        const submitButton = document.getElementById("textSubmitButton");
+
+        if (!patientId || !caregiverId || !message) {
+
+            statusElement.textContent =
+                "Preencha todos os campos antes de enviar.";
+
+            statusElement.className = "error";
+
+            return;
+
+        }
+
+        submitButton.disabled = true;
+
+        submitButton.textContent = "Processando...";
+
+        statusElement.textContent =
+            "Enviando relato para interpretação...";
+
+        statusElement.className = "";
+
+        resultCard.classList.add("hidden");
+
+        try {
+
+            const response = await fetch("/api/v1/messages", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    patient_id: patientId,
+
+                    caregiver_id: caregiverId,
+
+                    message: message
+
+                })
+
+            });
+
+            if (!response.ok) {
+
+                throw new Error(await getApiError(response));
+
+            }
+
+            const normalizedData = await response.json();
+
+            console.log("Dados normalizados:", normalizedData);
+
+            await interpretNormalizedData(normalizedData, message);
+
+        } catch (error) {
+
+            console.error("Erro no envio de texto:", error);
+
+            statusElement.textContent =
+                "Não foi possível concluir a interpretação:\n" +
+                error.message;
+
+            statusElement.className = "error";
+
+        } finally {
+
+            submitButton.disabled = false;
+
+            submitButton.textContent = "Interpretar relato";
+
+        }
+
+    });
+
+
+    // ENVIA O ÁUDIO PARA O FASTAPI
+
+    async function sendAudio() {
+
+        const patientId = document.getElementById("patientId")
+            .value.trim();
+
+        const caregiverId = document.getElementById("caregiverId")
+            .value.trim();
+
+        const sendButton = document.getElementById("sendAudioButton");
+
+        if (!patientId || !caregiverId) {
+
+            statusElement.textContent =
+                "Preencha a identificação do paciente e do cuidador.";
+
+            statusElement.className = "error";
+
+            return;
+
+        }
+
+        if (!audioBlob || audioBlob.size === 0) {
+
+            statusElement.textContent =
+                "Nenhuma gravação válida foi encontrada.";
+
+            statusElement.className = "error";
+
+            return;
+
+        }
+
+        // Verifica o limite de 20 MB do endpoint.
+
+        const maxSize = 20 * 1024 * 1024;
+
+        if (audioBlob.size > maxSize) {
+
+            statusElement.textContent =
+                "O áudio ultrapassou o limite de 20 MB.";
+
+            statusElement.className = "error";
+
+            return;
+
+        }
+
+        sendButton.disabled = true;
+
+        sendButton.textContent = "Enviando áudio...";
+
+        statusElement.textContent =
+            "Enviando gravação para transcrição...";
+
+        statusElement.className = "";
+
+        resultCard.classList.add("hidden");
+
+
+        try {
+
+            // Identifica a extensão do áudio.
+
+            let extension = "webm";
+
+            if (audioBlob.type.includes("ogg")) {
+
+                extension = "ogg";
+
+            } else if (audioBlob.type.includes("mp4")) {
+
+                extension = "m4a";
+
+            } else if (audioBlob.type.includes("wav")) {
+
+                extension = "wav";
+
+            }
+
+            const filename = `gravacao_${Date.now()}.${extension}`;
+
+
+            // Monta o formulário de envio.
+
+            const formData = new FormData();
+
+            formData.append("patient_id", patientId);
+
+            formData.append("caregiver_id", caregiverId);
+
+            formData.append("file", audioBlob, filename);
+
+
+            console.log("Arquivo de áudio:", {
+
+                filename: filename,
+
+                type: audioBlob.type,
+
+                size: audioBlob.size
+
+            });
+
+
+            // Envia para o endpoint de áudio.
+
+            const audioResponse = await fetch("/api/v1/audio", {
+
+                method: "POST",
+
+                body: formData
+
+            });
+
+
+            if (!audioResponse.ok) {
+
+                throw new Error(await getApiError(audioResponse));
+
+            }
+
+
+            // Recebe o texto transcrito e normalizado.
+
+            const normalizedData = await audioResponse.json();
+
+            console.log("Resultado da transcrição:", normalizedData);
+
+
+            if (!normalizedData.content) {
+
+                throw new Error(
+                    "O endpoint de áudio não retornou o texto transcrito."
+                );
+
+            }
+
+
+            statusElement.textContent =
+                "Áudio transcrito! Encaminhando o texto para interpretação...";
+
+
+            // Envia a transcrição para a IA.
+
+            await interpretNormalizedData(normalizedData);
+
+
+        } catch (error) {
+
+            console.error("Erro no envio do áudio:", error);
+
+            statusElement.textContent =
+                "Não foi possível processar o áudio:\n" +
+                error.message;
+
+            statusElement.className = "error";
+
+        } finally {
+
+            sendButton.disabled = false;
+
+            sendButton.textContent = "Enviar e interpretar áudio";
+
+        }
+
+    }
+
+
+    // MONTA O RELATÓRIO
+
+    function displayResult(result) {
+
+        const observations = result.observations || [];
+
+        const missingInfo = result.missing_information || [];
+
+        let receivedDate = "Não informado";
+
+        if (result.received_at) {
+
+            const parsedDate = new Date(result.received_at);
+
+            if (!isNaN(parsedDate.getTime())) {
+
+                receivedDate = parsedDate.toLocaleString("pt-BR");
+
+            }
+
+        }
+
+        const uniqueCategories = [
+
+            ...new Set(
+
+                observations.map(item =>
+
+                    categories[item.category] || item.category
+
+                )
+
+            )
+
+        ];
+
+
+        const observationCards = observations.map(observation => {
+
+            const category =
+
+                categories[observation.category] ||
+
+                observation.category;
+
+            const status = observation.information_status
+
+                ? statuses[observation.information_status] ||
+
+                  observation.information_status
+
+                : null;
+
+            return `
+
+                <div class="observation">
+
+                    <h3>${escapeHtml(category)}</h3>
+
+                    ${status ? `
+
+                        <p class="muted">
+
+                            Situação da informação:
+                            ${escapeHtml(status)}
+
+                        </p>
+
+                    ` : ""}
+
+                    <p>${escapeHtml(observation.description)}</p>
+
+                    ${observation.reported_time ? `
+
+                        <p class="muted">
+
+                            Horário informado:
+                            ${escapeHtml(observation.reported_time)}
+
+                        </p>
+
+                    ` : ""}
+
+                    <div class="evidence">
+
+                        <strong>Trecho original do relato:</strong>
+
+                        <p>${escapeHtml(observation.evidence_text)}</p>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+        const missingCards = missingInfo.length
+
+            ? `
+
+                <div class="report-section missing-info">
+
+                    <h3>Informações pendentes</h3>
+
+                    <ul>
+
+                        ${missingInfo.map(item => `
+
+                            <li>${escapeHtml(item)}</li>
+
+                        `).join("")}
+
+                    </ul>
+
+                </div>
+
+            `
+
+            : "";
+
+
+        resultContent.innerHTML = `
+
+            <div class="report-header">
+
+                <div class="report-title">
+
+                    Relatório de acompanhamento
+
+                </div>
+
+                <div class="report-meta">
+
+                    <strong>Paciente:</strong>
+                    ${escapeHtml(result.patient_id)}
+
+                    <br>
+
+                    <strong>Cuidador:</strong>
+                    ${escapeHtml(result.caregiver_id)}
+
+                    <br>
+
+                    <strong>Recebido em:</strong>
+                    ${escapeHtml(receivedDate)}
+
+                    <br>
+
+                    <strong>Origem:</strong>
+                    ${escapeHtml(result.source)}
+
+                </div>
+
+            </div>
+
+
+            <div class="report-notice">
+
+                <strong>Prévia de interpretação automatizada</strong>
+
+                <br>
+
+                Este documento organiza informações relatadas
+                pelo cuidador.
+
+                Não representa diagnóstico ou avaliação clínica.
+                É necessária revisão humana.
+
+            </div>
+
+
+            <div class="report-section">
+
+                <h3>Resumo da interpretação</h3>
+
+                <div class="summary">
+
+                    Foram identificadas
+
+                    <strong>${observations.length}</strong>
+
+                    observações em
+
+                    <strong>${uniqueCategories.length}</strong>
+
+                    categorias.
+
+                    <br><br>
+
+                    <strong>Categorias identificadas:</strong>
+
+                    ${uniqueCategories.map(escapeHtml).join(", ") || "Nenhuma"}
+
+                </div>
+
+            </div>
+
+
+            <div class="report-section">
+
+                <h3>Observações identificadas</h3>
+
+                ${observationCards ||
+                    "<p>Nenhuma observação foi identificada.</p>"}
+
+            </div>
+
+
+            ${missingCards}
+
+
+            <div class="report-section">
+
+                <p class="review-label">
+
+                    Revisão humana:
+
+                    ${result.review_required !== false
+                        ? "Necessária"
+                        : "Não sinalizada pelo sistema"}
+
+                </p>
+
+            </div>
+
+
+            <div class="footer-note">
+
+                Relatório gerado automaticamente a partir das
+                informações recebidas pela API.
+
+                O conteúdo deve ser conferido por profissional
+                responsável antes de qualquer utilização assistencial.
+
+            </div>
+
+        `;
+
+        resultCard.classList.remove("hidden");
+
+    }
+
+</script>
+
+</body>
+</html>

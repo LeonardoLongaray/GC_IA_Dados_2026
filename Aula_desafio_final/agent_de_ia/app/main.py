@@ -1,12 +1,19 @@
 from fastapi import FastAPI
 from agent_de_ia.app.api_endpoints import messages, audio
 from agent_de_ia.app.api_endpoints import messages, audio, interpretations
+from pathlib import Path
+from fastapi.responses import FileResponse
 
 app = FastAPI(
     title="Agente de Acompanhamento",
     description="API para organização de registros e relatórios diários.",
     version="1.0.0"
 )
+
+@app.get("/test", include_in_schema=False)
+def test_interface():
+    html_path = Path(__file__).resolve().parent / "static" / "test.html"
+    return FileResponse(html_path)
 
 app.include_router(
     messages.router,
