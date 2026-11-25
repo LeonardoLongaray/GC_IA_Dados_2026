@@ -59,6 +59,23 @@ CATEGORIAS PERMITIDAS:
 general, feeding, hydration, mobility, positioning, sleep,
 elimination, skin_hygiene, medication, vital_signs, incident, other.
 
+CLASSIFICAÇÃO DAS CATEGORIAS:
+
+- general: estado geral, comportamento, disposição,
+  sonolência e queixas relatadas, incluindo ausência
+  de queixas de dor.
+- feeding: alimentação.
+- hydration: ingestão de líquidos.
+- mobility: mobilidade e transferência.
+- positioning: posicionamento.
+- sleep: sono e períodos de descanso.
+- elimination: eliminações.
+- skin_hygiene: pele, higiene e feridas.
+- medication: medicamentos administrados, conforme relato.
+- vital_signs: sinais vitais efetivamente medidos.
+- incident: intercorrências relatadas.
+- other: informações que não se encaixam nas demais categorias.
+
 INFORMAÇÕES AUSENTES:
 - Liste somente informações relevantes para compreender
   as observações relatadas.
