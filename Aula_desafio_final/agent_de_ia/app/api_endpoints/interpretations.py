@@ -8,8 +8,7 @@ from agent_de_ia.app.services.interpretation_service import interpret_input
 router = APIRouter()
 
 
-@router.post(
-    "/interpretations",
+@router.post("/interpretations",
     response_model=InterpretationResponse,
     status_code=200
 )

@@ -1,19 +1,12 @@
-
 from datetime import datetime, timezone
 from pathlib import Path
-
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from starlette.concurrency import run_in_threadpool
-
 from agent_de_ia.app.schemas.normalized_input_schema import NormalizedInput
-
 from agent_de_ia.app.services.transcription_service import transcribe_audio
-
 from agent_de_ia.app.services.normalization_service import normalize_audio
 
-
 router = APIRouter()
-
 
 # Extensões de áudio aceitas pelo sistema.
 ALLOWED_EXTENSIONS = {
@@ -30,7 +23,6 @@ ALLOWED_EXTENSIONS = {
 # Tamanho máximo permitido: 20 MB.
 MAX_FILE_SIZE = 20 * 1024 * 1024
 
-
 @router.post(
     "/audio",
     response_model=NormalizedInput,
@@ -46,7 +38,7 @@ async def receive_audio(
 
     try:
 
-        # 1. Verifica se o arquivo possui nome e extensão válidos.
+        # Verifica se o arquivo possui nome e extensão válidos.
 
         filename = file.filename or "audio.webm"
 
@@ -101,7 +93,7 @@ async def receive_audio(
 
             raise HTTPException(
                 status_code=422,
-                detail="Não foi possível identificar uma fala no áudio."
+                detail="Não foi possível identificar o seu áudio."
             )
 
 

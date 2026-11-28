@@ -1,9 +1,7 @@
-
 from datetime import datetime
-
 from pydantic import BaseModel
 
-
+# Cria o objeto visual de modelo de resposta para áudio.
 class AudioResponse(BaseModel):
     patient_id: str
     caregiver_id: str

@@ -1,0 +1,74 @@
+Dra.Natalie - Profissional Médica do Sistema Único de Saúde
+
+ROTINA 
+- 3hrs na semana para visitas domiciliares
+- É realizada uma reunião para informar as prioridades de visitas para a equipe e se programar, uma vez na semana 
+
+### PERGUNTAS ### 
+##### Reunião de equipe #####
+#1 Como é extraído esses dados para parametrizar o paciente que será prioridade?
+- Comunicação através do familiar pedindo, identificação em consulta (busca ativa, ir até o paciente por identificar necessidade), através do agente comunitário da região, informação planilhada, quando hospital solicita.
+
+#2 Existe algum auxílio para familiares que cuidam do idoso?
+- Atualmente não existe, até onde se sabe, porém existe o BPC/LOAS para o paciente
+
+#3 Entendimento de como cuidar das pessoas, existe acesso à informação de forma governamental ou democratizada?
+- BVAPS, Ministério da Saúde
+
+=================================================================
+##### Motivos para visitas domiciliares #####
+- Acamados
+- Deficiência de mobilidade
+
+=================================================================
+##### Principais dificuldades #####
+- Região 
+- Mobilização de equipe
+- Vulnerabilidades sociais gerais
+- Acesso a informação
+- Insegurança financeira
+
+================================================================
+### Declínio cognitivo ###
+- impede de organizar tratamento com eficiência 
+
+=================================================================
+### CUIDADORES ###
+- Muitas vezes muito ruins de saúde semelhante aos pacientes
+
+=================================================================
+##### Programas para pesquisa ##### 
+### Melhor em casa ###
+- Acompanhamento mais próximo dos pacientes e com mais atenção
+- As vezes semanalmente
+- Prestado pelo hospital: Vila nova / Nossa Sra. da Conceição
+
+### BVAPS ###
+- Biblioteca de informações
+
+### Ministério da saúde ###
+- Biblioteca de informações
+
+### E-SUS ###
+- Plataforma de registros
+- Investigar integração
+
+### E-MULTI ###
+- Equipe multifunção para casos específicos
+- Fonoaudióloga, educador físico, nutricionista, psicóloga, psiquiatra e mais 
+
+================================================================
+##### Funcionalidades Pendente de Viabilidade #####
+- Informação por vídeo ou com ilustrações
+- App direcionado aos pacientes também
+- Orientações desde o básico até o avançado
+- Orientações sobre exercícios simples diários para mobilidade
+- Como evitar escaras 
+- Painel "prontuário" com filtros pelos tópicos das necessidades do paciente
+- Aba de fisioterapia tickavel para o fisio selecionar com vídeos e ilustrações
+- Aba de fonoterapia tickavel para o o fonoaudiologo selecionar com vídeos e ilustrações
+- Aba para cuidadores em questão de saúde mental, mindfulness, mensagens de esperanças 
+- Números de emergência (policia, bombeiros, emergência) e endereços importantes (farmácia distrital, CRAS, posto de saúde, farmácia do estado)
+
+================================================================
+##### Conversar com alguém do CRAS/Assistência social #####

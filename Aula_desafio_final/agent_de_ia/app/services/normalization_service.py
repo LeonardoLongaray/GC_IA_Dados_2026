@@ -3,7 +3,7 @@ from agent_de_ia.app.schemas.normalized_input_schema import (
     NormalizedInput
 )
 
-
+# Funções para normalizar as entradas de mensagens, organizando-as em um formato padrão.
 def normalize_message(
     patient_id: str,
     caregiver_id: str,
@@ -19,7 +19,7 @@ def normalize_message(
         received_at=datetime.now(timezone.utc)
     )
 
-
+# Função para normalizar a entrada de áudio.
 def normalize_audio(
     patient_id: str,
     caregiver_id: str,

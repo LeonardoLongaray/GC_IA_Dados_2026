@@ -1,19 +1,18 @@
 import json
 import os
 from pathlib import Path
-
 from dotenv import load_dotenv
 from openai import OpenAI
-
 from agent_de_ia.app.schemas.normalized_input_schema import NormalizedInput
 from agent_de_ia.app.schemas.interpretation_schema import InterpretationResponse
 
-
+# Busca o caminho do arquivo .env na raiz do projeto e carrega as variáveis de ambiente.
 BASE_DIR = Path(__file__).resolve().parents[2]
 ENV_PATH = BASE_DIR / ".env"
 
 load_dotenv(ENV_PATH, override=True)
 
+# Diagnóstico de sistema, se encontrou ou não a chave e o modelo do GROQ.
 print("================================")
 print("DIAGNÓSTICO GROQ")
 print("Raiz:", BASE_DIR)
@@ -23,7 +22,7 @@ print("Chave carregada:", bool(os.getenv("GROQ_API_KEY")))
 print("Modelo carregado:", bool(os.getenv("GROQ_MODEL")))
 print("================================")
 
-
+# Prompt que é enviado ao Groq
 SYSTEM_PROMPT = """
 Você é um sistema de organização de relatos de cuidadores.
 
@@ -100,7 +99,7 @@ Responda exclusivamente com JSON válido, seguindo esta estrutura:
 Não inclua explicações fora do JSON.
 """
 
-
+# Função que interpreta a entrada do usuário usando o modelo Groq.
 def interpret_input(data: NormalizedInput) -> InterpretationResponse:
     api_key = os.getenv("GROQ_API_KEY")
     model = os.getenv("GROQ_MODEL")

@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Literal
 from pydantic import BaseModel, Field
 
+# Cria o objeto visual de modelo das categorias e quadros de descrição para interpretação.
 
 class Observation(BaseModel):
     category: Literal[
@@ -31,6 +32,7 @@ class Observation(BaseModel):
         description="Trecho original que sustenta a observação"
     )
 
+# Aplica um molde visual das interpretações
 
 class InterpretationResponse(BaseModel):
     patient_id: str
